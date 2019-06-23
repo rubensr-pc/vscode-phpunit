@@ -148,7 +148,7 @@ export class TestRunner {
 
         return {
             title: 'PHPUnit LSP',
-            command: params.shift() as string,
+            command: 'php', //params.shift() as string,
             arguments: params,
         };
     }
