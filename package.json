@@ -1,7 +1,7 @@
 {
-    "name": "vscode-phpunit",
-    "description": "PHPUnit Test Explorer",
-    "displayName": "PHPUnit Test Explorer",
+    "name": "vscode-codecept",
+    "description": "Codeception Test Explorer",
+    "displayName": "Codeception Test Explorer",
     "icon": "img/icon.png",
     "author": "recca0120",
     "license": "MIT",
@@ -9,9 +9,9 @@
     "preview": true,
     "repository": {
         "type": "git",
-        "url": "https://github.com/recca0120/vscode-phpunit"
+        "url": "https://github.com/rubensr-pc/vscode-phpunit"
     },
-    "publisher": "recca0120",
+    "publisher": "rubensr-pc",
     "categories": [
         "Other",
         "Debuggers",
@@ -22,6 +22,8 @@
         "testing",
         "test explorer",
         "phpunit",
+        "codeception",
+        "codecept",
         "language server protocol"
     ],
     "engines": {
@@ -38,19 +40,19 @@
         "commands": [
             {
                 "command": "phpunit.run-all",
-                "title": "PHPUnit: Run all tests"
+                "title": "Codecept: Run all tests"
             },
             {
                 "command": "phpunit.run-file",
-                "title": "PHPUnit: Run tests in current file"
+                "title": "Codecept: Run tests in current file"
             },
             {
                 "command": "phpunit.run-test-at-cursor",
-                "title": "PHPUnit: Run the test at the current cursor position"
+                "title": "Codecept: Run the test at the current cursor position"
             },
             {
                 "command": "phpunit.rerun",
-                "title": "PHPUnit: Repeat the last test run"
+                "title": "Codecept: Repeat the last test run"
             }
         ],
         "keybindings": [
@@ -81,7 +83,7 @@
         ],
         "configuration": {
             "type": "object",
-            "title": "PHPUnit configuration",
+            "title": "Codeception configuration",
             "properties": {
                 "phpunit.maxNumberOfProblems": {
                     "scope": "resource",
