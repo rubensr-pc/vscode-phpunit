@@ -58,24 +58,16 @@ export class TestRunner {
             return await this.doRun([], options);
         }
 
-        const params = [];
-        const deps: string[] = [];
-
-        if (p.method) {
-            deps.push(p.method);
-        }
-
-        if (p.depends) {
-            deps.push(...p.depends);
-        }
-
-        if (deps.length > 0) {
-            params.push('--filter');
-            params.push(`^.*::(${deps.join('|')})( with data set .*)?$`);
-        }
+        const params : string[] = [];
 
         if (p.file) {
-            params.push(this._files.asUri(p.file).fsPath);
+            let fname = this._files.asUri(p.file).fsPath;
+            const cwd = options && options.cwd ? options.cwd : process.cwd();
+            fname = '.' + fname.replace(cwd, '');
+            if (p.method) {
+                fname = fname.concat(':', p.method);
+            }
+            params.push(fname);
         }
 
         return await this.doRun(params, options);
@@ -126,11 +118,12 @@ export class TestRunner {
         ]);
 
         if (phpBinary) {
-            params.push(phpBinary);
+            // params.push('phpBinary');
+            params.push('php');
         }
 
         if (phpUnitBinary) {
-            params.push(phpUnitBinary);
+            // params.push(phpUnitBinary);
         }
 
         const hasConfiguration = this.args.some((arg: string) =>
@@ -138,15 +131,24 @@ export class TestRunner {
         );
 
         if (!hasConfiguration && phpUnitXml) {
-            params.push('-c');
-            params.push(phpUnitXml);
+            // params.push('-c');
+            // params.push(phpUnitXml);
         }
+
+        params = [
+            '-d',
+            'xdebug.remote_port=8000',
+            './vendor/bin/codecept',
+            'run',
+            'unit',
+            '--config=./tests/unit/codeception.yml'
+        ];
 
         params = params.concat(this.args, args).filter(arg => !!arg);
 
         return {
             title: 'PHPUnit LSP',
-            command: params.shift() as string,
+            command: 'php', //params.shift() as string,
             arguments: params,
         };
     }
