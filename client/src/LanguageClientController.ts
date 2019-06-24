@@ -39,7 +39,7 @@ export class LanguageClientController implements Disposable {
         await this.client.onReady();
 
         this.client.onNotification('TestRunStartedEvent', () => {
-            this.notify.show('PHPUnit Running');
+            this.notify.show('Codecept Running');
 
             if (this.config.clearOutputOnRun === true) {
                 this.outputChannel.clear();

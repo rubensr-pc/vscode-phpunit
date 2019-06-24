@@ -15,12 +15,12 @@ const statusString = [
 ].join('|');
 
 const statusPattern = new RegExp(
-    `There (was|were) \\d+ (${statusString})(s?)( test?)(:?)`,
+    `There (was|were) \\d+ (${statusString})(s)?( test)?(:)?`,
     'i'
 );
-const classPattern = new RegExp('^\\d+\\)\\s(([^:]*)::([^\\s]*).*)$');
+const classPattern = new RegExp('^\\d+\\)\\s(([^:]*): (.*))$');
 const messagePattern = new RegExp('^(.*)$');
-const filesPattern = new RegExp('^(.*):(\\d+)$');
+const filesPattern = new RegExp('^#\\d+\\s+(.*):(\\d+)$');
 
 export class OutputProblemMatcher extends ProblemMatcher {
     private currentStatus: Status = this.asStatus('failure');
@@ -71,8 +71,12 @@ export class OutputProblemMatcher extends ProblemMatcher {
     ) {
         switch (index) {
             case 0:
+                const method = 'test' + m[3].toLowerCase()
+                    .split(' ')
+                    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+                    .join('');
                 Object.assign(problem, this.parseNamespace(m[2]), {
-                    method: m[3],
+                    method: method,
                     status: this.currentStatus,
                 });
 

@@ -136,14 +136,15 @@ export class TestRunner {
         }
 
         params = [
-            '-d',
-	    'xdebug.remote_port=8000',
-	    '-d',
-	    'auto_prepend_file=xdebug_filter.php',
+            '-dxdebug.remote_port=8000',
+	        '-dauto_prepend_file=xdebug_filter.php',
             './vendor/bin/codecept',
             'run',
             'unit',
-            '--config=./tests/unit/codeception.yml'
+            '--ansi',
+            '--no-colors',
+            '--config=./tests/unit/codeception.yml',
+            '--ext=DotReporter'
         ];
 
         params = params.concat(this.args, args).filter(arg => !!arg);
