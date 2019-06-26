@@ -25,10 +25,10 @@ import {
 
 export class WorkspaceFolder {
     private commandLookup: Map<string, Function> = new Map([
-        ['phpunit.lsp.run-all', this.runAll],
-        ['phpunit.lsp.rerun', this.rerun],
-        ['phpunit.lsp.run-file', this.runFile],
-        ['phpunit.lsp.run-test-at-cursor', this.runTestAtCursor],
+        ['codecept.lsp.run-all', this.runAll],
+        ['codecept.lsp.rerun', this.rerun],
+        ['codecept.lsp.run-file', this.runFile],
+        ['codecept.lsp.run-test-at-cursor', this.runTestAtCursor],
     ]);
 
     constructor(
@@ -128,7 +128,7 @@ export class WorkspaceFolder {
 
         this.testRunner
             .setPhpBinary(this.config.php)
-            .setPhpUnitBinary(this.config.phpunit)
+            .setCodeceptBinary(this.config.codecept)
             .setArgs(this.config.args);
 
         const options = {
@@ -195,9 +195,9 @@ export class WorkspaceFolder {
                 const id: string = tests[0] || 'root';
                 const command =
                     id === 'root'
-                        ? { command: 'phpunit.lsp.run-all', arguments: [] }
+                        ? { command: 'codecept.lsp.run-all', arguments: [] }
                         : {
-                              command: 'phpunit.lsp.run-test-at-cursor',
+                              command: 'codecept.lsp.run-test-at-cursor',
                               arguments: [id],
                           };
 

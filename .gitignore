@@ -4,6 +4,6 @@ client/server
 .vscode-test
 
 /coverage
-.phpunit.result.cache
+.codecept.result.cache
 tsconfig.tsbuildinfo
 *.vsix

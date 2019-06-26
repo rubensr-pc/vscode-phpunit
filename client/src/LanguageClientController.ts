@@ -72,23 +72,23 @@ export class LanguageClientController implements Disposable {
     }
 
     private runAll() {
-        this.registerCommand('phpunit.run-all');
+        this.registerCommand('codecept.run-all');
     }
 
     private rerun() {
-        this.registerCommand('phpunit.rerun');
+        this.registerCommand('codecept.rerun');
     }
 
     private runFile() {
-        this.registerCommand('phpunit.run-file');
+        this.registerCommand('codecept.run-file');
     }
 
     private runTestAtCursor() {
-        this.registerCommand('phpunit.run-test-at-cursor');
+        this.registerCommand('codecept.run-test-at-cursor');
     }
 
     private cancel() {
-        this.registerCommand('phpunit.cancel');
+        this.registerCommand('codecept.cancel');
     }
 
     private registerCommand(command: string) {
@@ -105,7 +105,7 @@ export class LanguageClientController implements Disposable {
                     const document = textEditor.document;
 
                     this.client.sendRequest(ExecuteCommandRequest.type, {
-                        command: command.replace(/^phpunit/, 'phpunit.lsp'),
+                        command: command.replace(/^codecept/, 'codecept.lsp'),
                         arguments: [
                             document.uri.toString(),
                             document.uri.toString(),

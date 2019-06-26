@@ -5,7 +5,7 @@
     "icon": "img/icon.png",
     "author": "recca0120",
     "license": "MIT",
-    "version": "2.0.71",
+    "version": "2.0.72",
     "preview": true,
     "repository": {
         "type": "git",
@@ -21,7 +21,7 @@
         "test",
         "testing",
         "test explorer",
-        "phpunit",
+        "codecept",
         "codeception",
         "codecept",
         "language server protocol"
@@ -39,59 +39,59 @@
     "contributes": {
         "commands": [
             {
-                "command": "phpunit.run-all",
+                "command": "codecept.run-all",
                 "title": "Codecept: Run all tests"
             },
             {
-                "command": "phpunit.run-file",
+                "command": "codecept.run-file",
                 "title": "Codecept: Run tests in current file"
             },
             {
-                "command": "phpunit.run-test-at-cursor",
+                "command": "codecept.run-test-at-cursor",
                 "title": "Codecept: Run the test at the current cursor position"
             },
             {
-                "command": "phpunit.rerun",
+                "command": "codecept.rerun",
                 "title": "Codecept: Repeat the last test run"
             }
         ],
         "keybindings": [
             {
                 "key": "cmd+t cmd+f",
-                "command": "phpunit.run-file",
+                "command": "codecept.run-file",
                 "when": "editorTextFocus && editorLangId == 'php'"
             },
             {
                 "key": "cmd+t cmd+t",
-                "command": "phpunit.run-test-at-cursor",
+                "command": "codecept.run-test-at-cursor",
                 "when": "editorTextFocus && editorLangId == 'php'"
             },
             {
                 "key": "cmd+t cmd+l",
-                "command": "phpunit.rerun",
+                "command": "codecept.rerun",
                 "when": "editorTextFocus && editorLangId == 'php'"
             },
             {
                 "key": "cmd+t cmd+d",
-                "command": "phpunit.run-directory",
+                "command": "codecept.run-directory",
                 "when": "editorTextFocus && editorLangId == 'php'"
             },
             {
                 "key": "cmd+t cmd+s",
-                "command": "phpunit.run-all"
+                "command": "codecept.run-all"
             }
         ],
         "configuration": {
             "type": "object",
             "title": "Codeception configuration",
             "properties": {
-                "phpunit.maxNumberOfProblems": {
+                "codecept.maxNumberOfProblems": {
                     "scope": "resource",
                     "type": "number",
                     "default": 100,
                     "description": "Controls the maximum number of problems produced by the server."
                 },
-                "phpunit.trace.server": {
+                "codecept.trace.server": {
                     "scope": "window",
                     "type": "string",
                     "enum": [
@@ -102,30 +102,30 @@
                     "default": "off",
                     "description": "Traces the communication between VS Code and the language server."
                 },
-                "phpunit.logpanel": {
+                "codecept.logpanel": {
                     "description": "write diagnotic logs to an output panel",
                     "type": "boolean",
                     "scope": "resource"
                 },
-                "phpunit.logfile": {
+                "codecept.logfile": {
                     "description": "write diagnostic logs to the given file",
                     "type": "string",
                     "scope": "resource"
                 },
-                "phpunit.php": {
+                "codecept.php": {
                     "type": "string",
                     "description": "Absolute path to php. Fallback to global php if it exists on the command line."
                 },
-                "phpunit.phpunit": {
+                "codecept.codecept": {
                     "type": "string",
-                    "description": "Path to phpunit. Can be the phpunit file or phpunit.phar.\n\nAutomatically finds it in common places:\n  - Composer vendor directory\n  - phpunit.phar in your project\n  - phpunit (or phpunit.bat for windows) globally on the command line"
+                    "description": "Path to codecept.\n\nAutomatically finds it in common places:\n  - Composer vendor directory\n  - codecept (or codecept.bat for windows) globally on the command line"
                 },
-                "phpunit.args": {
+                "codecept.args": {
                     "type": "array",
                     "default": [],
-                    "description": "Any phpunit args (phpunit --help) E.g. --configuration ./phpunit.xml.dist"
+                    "description": "Any codecept args (codecept --help) E.g. --configuration ./codeception.yml"
                 },
-                "phpunit.files": {
+                "codecept.files": {
                     "description": "The glob(s) describing the location of your test files (relative to the workspace folder)",
                     "type": "string",
                     "items": {
@@ -134,12 +134,12 @@
                     "default": "{test,tests}/**/*Test.php",
                     "scope": "resource"
                 },
-                "phpunit.clearOutputOnRun": {
+                "codecept.clearOutputOnRun": {
                     "type": "boolean",
                     "default": true,
                     "description": "True will clear the output when we run a new test. False will leave the output after every test."
                 },
-                "phpunit.showAfterExecution": {
+                "codecept.showAfterExecution": {
                     "type": "string",
                     "enum": [
                         "always",
@@ -156,7 +156,7 @@
             {
                 "language": "Log",
                 "scopeName": "code.log",
-                "path": "./client/syntaxes/phpunit.tmLanguage"
+                "path": "./client/syntaxes/codecept.tmLanguage"
             }
         ]
     },

@@ -24,7 +24,7 @@ import { Notify } from './Notify';
 
 let client: LanguageClient;
 export function activate(context: ExtensionContext) {
-    const outputChannel = window.createOutputChannel('PHPUnit Language Server');
+    const outputChannel = window.createOutputChannel('Codecept Language Server');
 
     // The server is implemented in node
     let serverModule = context.asAbsolutePath(
@@ -65,8 +65,8 @@ export function activate(context: ExtensionContext) {
 
     // Create the language client and start the client.
     client = new LanguageClient(
-        'phpunit',
-        'PHPUnit Language Server',
+        'codecept',
+        'Codecept Language Server',
         serverOptions,
         clientOptions
     );
@@ -84,7 +84,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(controller.init());
 
     const workspaceFolder = (workspace.workspaceFolders || [])[0];
-    const log = new Log('phpunit', workspaceFolder, 'PHPUnit Test Explorer');
+    const log = new Log('codecept', workspaceFolder, 'Codecept Test Explorer');
     context.subscriptions.push(log);
 
     const testExplorerExtension = extensions.getExtension<TestHub>(

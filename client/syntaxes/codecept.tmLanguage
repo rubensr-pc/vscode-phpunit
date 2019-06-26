@@ -9,7 +9,7 @@
             <string>log</string>
         </array>
         <key>name</key>
-        <string>Phpunit file</string>
+        <string>Codecept file</string>
         <key>patterns</key>
         <array>
             <dict>

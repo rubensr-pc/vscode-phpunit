@@ -7,7 +7,7 @@ interface IConfiguration {
     maxNumberOfProblems: number;
     files: string;
     php?: string;
-    phpunit?: string;
+    codecept?: string;
     args?: string[];
 }
 
@@ -34,8 +34,8 @@ export class Configuration implements IConfiguration {
         return this.defaults.php;
     }
 
-    get phpunit(): string | undefined {
-        return this.defaults.phpunit;
+    get codecept(): string | undefined {
+        return this.defaults.codecept;
     }
 
     get args(): string[] | undefined {
@@ -46,7 +46,7 @@ export class Configuration implements IConfiguration {
         if (configurationCapability) {
             this.defaults = await this.connection.workspace.getConfiguration({
                 scopeUri: this.workspaceFolder.uri,
-                section: 'phpunit',
+                section: 'codecept',
             });
         }
 

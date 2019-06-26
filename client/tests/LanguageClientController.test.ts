@@ -62,7 +62,7 @@ describe('LanguageClientController', () => {
         triggerCommand: async (name: string) => {
             await commands.commands[name](textEditor);
 
-            return client.requests[name.replace(/phpunit\./, 'phpunit.lsp.')];
+            return client.requests[name.replace(/codecept\./, 'codecept.lsp.')];
         },
     };
 
@@ -82,38 +82,38 @@ describe('LanguageClientController', () => {
     });
 
     it('execute run all', async () => {
-        expect(await client.triggerCommand('phpunit.run-all')).toEqual({
-            command: 'phpunit.lsp.run-all',
+        expect(await client.triggerCommand('codecept.run-all')).toEqual({
+            command: 'codecept.lsp.run-all',
             arguments: ['foo.php', 'foo.php', 0],
         });
     });
 
     it('execute rerun', async () => {
-        expect(await client.triggerCommand('phpunit.rerun')).toEqual({
-            command: 'phpunit.lsp.rerun',
+        expect(await client.triggerCommand('codecept.rerun')).toEqual({
+            command: 'codecept.lsp.rerun',
             arguments: ['foo.php', 'foo.php', 0],
         });
     });
 
     it('execute run file', async () => {
-        expect(await client.triggerCommand('phpunit.run-file')).toEqual({
-            command: 'phpunit.lsp.run-file',
+        expect(await client.triggerCommand('codecept.run-file')).toEqual({
+            command: 'codecept.lsp.run-file',
             arguments: ['foo.php', 'foo.php', 0],
         });
     });
 
     it('execute run test at cursor', async () => {
         expect(
-            await client.triggerCommand('phpunit.run-test-at-cursor')
+            await client.triggerCommand('codecept.run-test-at-cursor')
         ).toEqual({
-            command: 'phpunit.lsp.run-test-at-cursor',
+            command: 'codecept.lsp.run-test-at-cursor',
             arguments: ['foo.php', 'foo.php', 0],
         });
     });
 
     it('execute cancel', async () => {
-        expect(await client.triggerCommand('phpunit.cancel')).toEqual({
-            command: 'phpunit.lsp.cancel',
+        expect(await client.triggerCommand('codecept.cancel')).toEqual({
+            command: 'codecept.lsp.cancel',
             arguments: ['foo.php', 'foo.php', 0],
         });
     });

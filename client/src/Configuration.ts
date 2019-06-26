@@ -13,7 +13,7 @@ export class Configuration {
 
     get(property: string, defaultValue?: any) {
         return this._workspace
-            .getConfiguration('phpunit')
+            .getConfiguration('codecept')
             .get(property, defaultValue);
     }
 }

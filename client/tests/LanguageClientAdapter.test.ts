@@ -9,7 +9,7 @@ describe('LanguageClientAdapterTest', () => {
         index: 1,
     };
 
-    const log = new Log('phpunit', workspaceFolder, 'PHPUnit TestExplorer');
+    const log = new Log('codecept', workspaceFolder, 'Codecept TestExplorer');
 
     const client: any = {
         notifications: {},

@@ -31,7 +31,7 @@ export class TestRunner {
         return this;
     }
 
-    setPhpUnitBinary(phpUnitBinary: PathLike | URI | undefined) {
+    setCodeceptBinary(phpUnitBinary: PathLike | URI | undefined) {
         this.phpUnitBinary = phpUnitBinary
             ? this._files.asUri(phpUnitBinary).fsPath
             : '';

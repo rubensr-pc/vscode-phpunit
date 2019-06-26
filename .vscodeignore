@@ -8,7 +8,7 @@ contributing.md
 .travis.yml
 client/node_modules/**
 
-**/.phpunit.result.cache
+**/.codecept.result.cache
 **/tsconfig.tsbuildinfo
 **/webpack.config.js
 client/tests/**

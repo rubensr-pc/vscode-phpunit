@@ -1,6 +1,6 @@
-# PHPUnit Test Explorer for Visual Studio Code
+# Codecept Test Explorer for Visual Studio Code
 
-Run your PHPUnit tests in Node using the
+Run your Codecept tests in Node using the
 [Test Explorer UI](https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer).
 
 ![Screenshot](img/screenshot.png)
@@ -12,7 +12,7 @@ Run your PHPUnit tests in Node using the
 * Adds line decorations to the source line where a test failed
 * Shows a failed test's log when the test is selected in the explorer
 * Lets you choose test suites or individual tests in the explorer that should be run automatically after each file change
-* Forwards the console output from PHPUnit to a VS Code output channel
+* Forwards the console output from Codecept to a VS Code output channel
 
 ## Getting started
 * Install the extension
