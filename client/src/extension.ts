@@ -12,7 +12,6 @@ import {
     LanguageClientOptions,
     ServerOptions,
     TransportKind,
-    // WillSaveTextDocumentWaitUntilRequest,
 } from 'vscode-languageclient';
 import { TestHub, testExplorerExtensionId } from 'vscode-test-adapter-api';
 import { TestAdapterRegistrar, Log } from 'vscode-test-adapter-util';

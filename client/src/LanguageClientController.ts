@@ -1,4 +1,4 @@
-import { commands, Disposable, OutputChannel, TextEditor } from 'vscode';
+import { commands, Disposable, OutputChannel, TextEditor, window, StatusBarAlignment } from 'vscode';
 import { Configuration } from './Configuration';
 import { ExecuteCommandRequest } from 'vscode-languageserver-protocol';
 import { LanguageClient } from 'vscode-languageclient';
@@ -24,6 +24,7 @@ export class LanguageClientController implements Disposable {
         this.cancel();
         this.onTestRunStartedEvent();
         this.onTestRunFinishedEvent();
+        this.toggleCoverage();
 
         return this;
     }
@@ -89,6 +90,27 @@ export class LanguageClientController implements Disposable {
 
     private cancel() {
         this.registerCommand('codecept.cancel');
+    }
+
+    private toggleCoverage() {
+        const cmdId = 'codecept.toggleCoverage';
+
+        let coverageToggle = window.createStatusBarItem(StatusBarAlignment.Left, 100);
+        coverageToggle.command = cmdId;
+        coverageToggle.text = '$(thumbsup) Coverage';
+        coverageToggle.show();
+
+        this.disposables.push(
+            this._commands.registerCommand(cmdId, () => {
+                this.config.enableCoverage = !this.config.enableCoverage;
+                coverageToggle.text = this.config.enableCoverage
+                    ? '$(thumbsup) Coverage'
+                    : '$(thumbsdown) Coverage'
+
+                window.showInformationMessage('Hi Mate');
+            })
+        );
+
     }
 
     private registerCommand(command: string) {

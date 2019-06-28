@@ -139,6 +139,11 @@
                     "default": true,
                     "description": "True will clear the output when we run a new test. False will leave the output after every test."
                 },
+                "codecept.enableCoverage": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "True enables the generation of coverage information"
+                },
                 "codecept.showAfterExecution": {
                     "type": "string",
                     "enum": [
