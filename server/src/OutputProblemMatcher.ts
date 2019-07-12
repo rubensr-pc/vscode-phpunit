@@ -19,15 +19,16 @@ const statusPattern = new RegExp(
     `There (was|were) \\d+ (${statusString})(s)?( test)?(:)?`,
     'i'
 );
-const classPattern = new RegExp('^\\d+\\)\\s(([^:]*): (.*))$');
-const messagePattern = new RegExp('^(.*)$');
+const startPattern = new RegExp('^\\d+\\)\\s(([^:]*): (.*))$');
+const messagePattern = new RegExp('^([^#].*)$');
 const filesPattern = new RegExp('^#\\d+\\s+(.*):(\\d+)$');
+const classPattern = new RegExp('^#\\d+\\s+(.*)->(.*)$');
 
 export class OutputProblemMatcher extends ProblemMatcher {
     private currentStatus: Status = this.asStatus('failure');
 
     constructor(private suites?: TestSuiteCollection) {
-        super([classPattern, messagePattern, filesPattern]);
+        super([startPattern, messagePattern, filesPattern, classPattern]);
     }
 
     async parse(contents: string): Promise<ProblemNode[]> {
@@ -38,9 +39,9 @@ export class OutputProblemMatcher extends ProblemMatcher {
             let location: any = problem.files
                 .slice()
                 .reverse()
-                .find(loation => {
+                .find(location => {
                     return new RegExp(`${problem.class}.php`).test(
-                        loation.file
+                        location.file
                     );
                 });
 
@@ -72,42 +73,25 @@ export class OutputProblemMatcher extends ProblemMatcher {
     ) {
         switch (index) {
             case 0:
-                const method = 'test' + m[3].toLowerCase()
-                    .split(' ')
-                    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-                    .join('');
-                Object.assign(problem, this.parseNamespace(m[2]), {
-                    method: method,
-                    status: this.currentStatus,
-                });
-
-                problem.updateId();
-
                 break;
             case 1:
-                problem.message += `${m[1]}\n`;
-                break;
+                    problem.message += `${m[1]}\n`;
+                    break;
             case 2:
                 problem.files.push({
                     file: m[1],
                     line: parseInt(m[2], 10) - 1,
                 });
                 break;
+            case 3:
+                Object.assign(problem, {
+                    class: m[1],
+                    method: m[2],
+                    status: this.currentStatus,
+                });
+                problem.updateId();
+                break;
         }
-    }
-
-    private parseNamespace(name: string) {
-        const lastIndexOfSlash = name.lastIndexOf('\\');
-        let namespace = '';
-        let clazz = '';
-        if (lastIndexOfSlash >= 0) {
-            namespace = name.substr(0, lastIndexOfSlash).replace(/\\$/, '');
-            clazz = name.substr(lastIndexOfSlash).replace(/^\\/, '');
-        } else {
-            clazz = name;
-        }
-
-        return { namespace, class: clazz };
     }
 
     private asStatus(status: string): Status {
