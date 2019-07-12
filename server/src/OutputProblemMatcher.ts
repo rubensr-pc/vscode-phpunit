@@ -2,6 +2,7 @@ import { ProblemMatcher } from './ProblemMatcher';
 import { ProblemNode, Status } from './ProblemNode';
 import { TestNode } from './TestNode';
 import { TestSuiteCollection } from './TestSuiteCollection';
+import he from 'he';
 
 const statusString = [
     'UNKNOWN',
@@ -31,7 +32,7 @@ export class OutputProblemMatcher extends ProblemMatcher {
 
     async parse(contents: string): Promise<ProblemNode[]> {
         this.currentStatus = this.asStatus('failure');
-        const problems = await super.parse(contents);
+        const problems = await super.parse(he.decode(contents));
 
         return problems.map(problem => {
             let location: any = problem.files
