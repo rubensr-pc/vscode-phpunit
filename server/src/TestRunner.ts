@@ -137,7 +137,7 @@ export class TestRunner {
 
         params = [
             '-dxdebug.remote_port=8000',
-            //'-dauto_prepend_file=xdebug_filter.php',
+            '-dauto_prepend_file=misc/xdebug_filter.php',
             './vendor/bin/codecept',
             'run',
             'unit',
