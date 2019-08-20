@@ -2,7 +2,7 @@ import glob from 'glob';
 import URI, { setUriThrowOnMissingScheme } from 'vscode-uri';
 import { access, createReadStream, PathLike, readFile, writeFile } from 'fs';
 import { createInterface } from 'readline';
-import { dirname, join } from 'path';
+import { dirname, join, normalize } from 'path';
 import { Location, Position, Range } from 'vscode-languageserver-protocol';
 import { SpawnOptions } from 'child_process';
 
@@ -114,6 +114,23 @@ export class Filesystem {
         cwd: string = process.cwd()
     ): Promise<string | void> {
         return await this.find(search, [cwd]);
+    }
+
+    async finduptocwd(search: string, top: string, options?: SpawnOptions) {
+        const cwd = options && options.cwd ? options.cwd : process.cwd();
+        const paths = [join(cwd, normalize(dirname(top)))];
+
+        do {
+            const current = paths[paths.length - 1];
+            const parent = dirname(current);
+
+            if (cwd === parent) {
+                break;
+            }
+            paths.push(parent);
+        } while (true);
+
+        return await this.find(search, [cwd].concat(paths));
     }
 
     async findup(search: string | string[], options?: SpawnOptions) {

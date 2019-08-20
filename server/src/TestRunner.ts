@@ -111,10 +111,12 @@ export class TestRunner {
     ): Promise<Command> {
         let params = [];
 
-        const [phpBinary, phpUnitBinary, phpUnitXml] = await Promise.all([
+        const [phpBinary, phpUnitBinary, phpUnitXml,
+            codeceptionConfig] = await Promise.all([
             this.getPhpBinary(),
             this.getPhpUnitBinary(spawnOptions),
             this.getPhpUnitXml(spawnOptions),
+            this.getCodeceptionConfig(args, spawnOptions)
         ]);
 
         if (phpBinary) {
@@ -144,7 +146,7 @@ export class TestRunner {
             //'--coverage-xml',
             '--ansi',
             '--no-colors',
-            '--config=./tests/unit/codeception.yml',
+            '--config=' + codeceptionConfig,
             '--ext=DotReporter'
         ];
 
@@ -159,6 +161,14 @@ export class TestRunner {
 
     private getPhpBinary(): Promise<string> {
         return Promise.resolve(this.phpBinary);
+    }
+
+    private async getCodeceptionConfig(args: string[], spawnOptions?: SpawnOptions) {
+        // this is probably wrong
+        if (args.length === 0) return '';
+
+        return await this._files.finduptocwd('codeception.yml',
+            args[0], spawnOptions);
     }
 
     private async getPhpUnitBinary(
