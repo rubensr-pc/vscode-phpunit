@@ -25,9 +25,12 @@ import {
 } from './TestResponse';
 import { PhpUnitTestRunner } from './PhpUnitTestRunner';
 import { normalize, dirname } from 'path';
+import { OutputProblemMatcher } from './OutputProblemMatcher';
+import { PhpUnitProblemMatcher } from "./PhpUnitProblemMatcher";
 
 export class WorkspaceFolder {
     private testRunner : TestRunner | undefined;
+    private problemMatcher : ProblemMatcher | undefined;
 
     private commandLookup: Map<string, Function> = new Map([
         ['codecept.lsp.run-all', this.runAll],
@@ -43,7 +46,6 @@ export class WorkspaceFolder {
         private suites: TestSuiteCollection,
         private events: TestEventCollection,
         private problems: ProblemCollection,
-        private problemMatcher: ProblemMatcher,
         private _files = files
     ) {
         this.onTestLoadStartedEvent();
@@ -145,10 +147,12 @@ export class WorkspaceFolder {
         };
 
         if (phpUnitXml) {
-            this.testRunner = new PhpUnitTestRunner()
+            this.testRunner = new PhpUnitTestRunner();
+            this.problemMatcher = new PhpUnitProblemMatcher(this.suites);
             options.cwd = normalize(dirname(phpUnitXml));
         } else {
             this.testRunner = new CodeceptTestRunner();
+            this.problemMatcher = new OutputProblemMatcher(this.suites);
         }
 
         this.testRunner

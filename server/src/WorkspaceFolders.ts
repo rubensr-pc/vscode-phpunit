@@ -2,7 +2,6 @@ import files from './Filesystem';
 import Parser from './Parser';
 import URI from 'vscode-uri';
 import { Configuration } from './Configuration';
-import { OutputProblemMatcher } from './OutputProblemMatcher';
 import { PathLike } from 'fs';
 import { ProblemCollection } from './ProblemCollection';
 import { TestEventCollection } from './TestEventCollection';
@@ -72,7 +71,6 @@ export class WorkspaceFolders {
         const suites = new TestSuiteCollection(new Parser(workspaceFolder));
         const events = new TestEventCollection();
         const problems = new ProblemCollection();
-        const problemMatcher = new OutputProblemMatcher(suites);
 
         return new WorkspaceFolder(
             workspaceFolder,
@@ -81,7 +79,6 @@ export class WorkspaceFolders {
             suites,
             events,
             problems,
-            problemMatcher,
             this._files
         );
     }
