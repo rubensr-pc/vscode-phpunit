@@ -11,7 +11,7 @@ export interface Params {
     depends?: string[];
 }
 
-export class TestRunner {
+export class CodeceptTestRunner {
     private phpBinary = '';
     private phpUnitBinary = '';
     private args: string[] = [];

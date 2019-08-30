@@ -6,7 +6,7 @@ import { ProblemMatcher } from './ProblemMatcher';
 import { TestEvent, TestSuiteEvent, TestSuiteInfo } from './TestExplorer';
 import { TestEventCollection } from './TestEventCollection';
 import { TestNode, TestSuiteNode } from './TestNode';
-import { TestRunner } from './TestRunner';
+import { CodeceptTestRunner } from './CodeceptTestRunner';
 import { TestSuiteCollection } from './TestSuiteCollection';
 import {
     Connection,
@@ -39,7 +39,7 @@ export class WorkspaceFolder {
         private events: TestEventCollection,
         private problems: ProblemCollection,
         private problemMatcher: ProblemMatcher,
-        private testRunner: TestRunner,
+        private testRunner: CodeceptTestRunner,
         private _files = files
     ) {
         this.onTestLoadStartedEvent();
