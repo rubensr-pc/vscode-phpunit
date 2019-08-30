@@ -6,7 +6,6 @@ import { OutputProblemMatcher } from './OutputProblemMatcher';
 import { PathLike } from 'fs';
 import { ProblemCollection } from './ProblemCollection';
 import { TestEventCollection } from './TestEventCollection';
-import { CodeceptTestRunner } from './CodeceptTestRunner';
 import { TestSuiteCollection } from './TestSuiteCollection';
 import { WorkspaceFolder } from './WorkspaceFolder';
 import {
@@ -74,7 +73,6 @@ export class WorkspaceFolders {
         const events = new TestEventCollection();
         const problems = new ProblemCollection();
         const problemMatcher = new OutputProblemMatcher(suites);
-        const testRunner = new CodeceptTestRunner();
 
         return new WorkspaceFolder(
             workspaceFolder,
@@ -84,7 +82,6 @@ export class WorkspaceFolders {
             events,
             problems,
             problemMatcher,
-            testRunner,
             this._files
         );
     }

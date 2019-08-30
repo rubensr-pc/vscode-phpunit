@@ -11,7 +11,7 @@ export interface Params {
     depends?: string[];
 }
 
-export class CodeceptTestRunner {
+export class PhpUnitTestRunner {
     private phpBinary = '';
     private phpUnitBinary = '';
     private args: string[] = [];
@@ -58,16 +58,24 @@ export class CodeceptTestRunner {
             return await this.doRun([], options);
         }
 
-        const params : string[] = [];
+        const params = [];
+        const deps: string[] = [];
+
+        if (p.method) {
+            deps.push(p.method);
+        }
+
+        if (p.depends) {
+            deps.push(...p.depends);
+        }
+
+        if (deps.length > 0) {
+            params.push('--filter');
+            params.push(`^.*::(${deps.join('|')})( with data set .*)?$`);
+        }
 
         if (p.file) {
-            let fname = this._files.asUri(p.file).fsPath;
-            const cwd = options && options.cwd ? options.cwd : process.cwd();
-            fname = '.' + fname.replace(cwd, '');
-            if (p.method) {
-                fname = fname.concat(':', p.method);
-            }
-            params.push(fname);
+            params.push(this._files.asUri(p.file).fsPath);
         }
 
         return await this.doRun(params, options);
@@ -111,21 +119,18 @@ export class CodeceptTestRunner {
     ): Promise<Command> {
         let params = [];
 
-        const [phpBinary, phpUnitBinary, phpUnitXml,
-            codeceptionConfig] = await Promise.all([
+        const [phpBinary, phpUnitBinary, phpUnitXml] = await Promise.all([
             this.getPhpBinary(),
             this.getPhpUnitBinary(spawnOptions),
             this.getPhpUnitXml(spawnOptions),
-            this.getCodeceptionConfig(args, spawnOptions)
         ]);
 
         if (phpBinary) {
-            // params.push('phpBinary');
-            params.push('php');
+            params.push(phpBinary);
         }
 
         if (phpUnitBinary) {
-            // params.push(phpUnitBinary);
+            params.push(phpUnitBinary);
         }
 
         const hasConfiguration = this.args.some((arg: string) =>
@@ -133,42 +138,21 @@ export class CodeceptTestRunner {
         );
 
         if (!hasConfiguration && phpUnitXml) {
-            // params.push('-c');
-            // params.push(phpUnitXml);
+            params.push('-c');
+            params.push(phpUnitXml);
         }
-
-        params = [
-            '-dxdebug.remote_port=8000',
-            //'-dauto_prepend_file=xdebug_filter.php',
-            './vendor/bin/codecept',
-            'run',
-            'unit',
-            //'--coverage-xml',
-            '--ansi',
-            '--no-colors',
-            '--config=' + codeceptionConfig,
-            '--ext=DotReporter'
-        ];
 
         params = params.concat(this.args, args).filter(arg => !!arg);
 
         return {
             title: 'PHPUnit LSP',
-            command: 'php', //params.shift() as string,
+            command: params.shift() as string,
             arguments: params,
         };
     }
 
     private getPhpBinary(): Promise<string> {
         return Promise.resolve(this.phpBinary);
-    }
-
-    private async getCodeceptionConfig(args: string[], spawnOptions?: SpawnOptions) {
-        // this is probably wrong
-        if (args.length === 0) return '';
-
-        return await this._files.finduptocwd('codeception.yml',
-            args[0], spawnOptions);
     }
 
     private async getPhpUnitBinary(

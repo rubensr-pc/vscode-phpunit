@@ -8,6 +8,7 @@ interface IConfiguration {
     files: string;
     php?: string;
     codecept?: string;
+    phpunit?: string;
     args?: string[];
 }
 
@@ -36,6 +37,10 @@ export class Configuration implements IConfiguration {
 
     get codecept(): string | undefined {
         return this.defaults.codecept;
+    }
+
+    get phpunit(): string | undefined {
+        return this.defaults.phpunit;
     }
 
     get args(): string[] | undefined {

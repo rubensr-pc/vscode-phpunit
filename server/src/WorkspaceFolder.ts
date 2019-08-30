@@ -7,6 +7,7 @@ import { TestEvent, TestSuiteEvent, TestSuiteInfo } from './TestExplorer';
 import { TestEventCollection } from './TestEventCollection';
 import { TestNode, TestSuiteNode } from './TestNode';
 import { CodeceptTestRunner } from './CodeceptTestRunner';
+import { TestRunner } from './TestRunner';
 import { TestSuiteCollection } from './TestSuiteCollection';
 import {
     Connection,
@@ -22,8 +23,12 @@ import {
     ITestResponse,
     FailedTestResponse,
 } from './TestResponse';
+import { PhpUnitTestRunner } from './PhpUnitTestRunner';
+import { normalize, dirname } from 'path';
 
 export class WorkspaceFolder {
+    private testRunner : TestRunner | undefined;
+
     private commandLookup: Map<string, Function> = new Map([
         ['codecept.lsp.run-all', this.runAll],
         ['codecept.lsp.rerun', this.rerun],
@@ -39,7 +44,6 @@ export class WorkspaceFolder {
         private events: TestEventCollection,
         private problems: ProblemCollection,
         private problemMatcher: ProblemMatcher,
-        private testRunner: CodeceptTestRunner,
         private _files = files
     ) {
         this.onTestLoadStartedEvent();
@@ -89,7 +93,7 @@ export class WorkspaceFolder {
     }
 
     async cancel() {
-        this.testRunner.cancel();
+        this.testRunner!.cancel();
 
         return this.sendRunTestFinished(new FailedTestResponse('cancel'));
     }
@@ -126,14 +130,32 @@ export class WorkspaceFolder {
     ) {
         await this.sendTestRunStartedEvent(tests);
 
-        this.testRunner
-            .setPhpBinary(this.config.php)
-            .setCodeceptBinary(this.config.codecept)
-            .setArgs(this.config.args);
+        // const isCodecept = await this._files.finduptocwd('codeception.yml',
+        //     params.file, options);
 
-        const options = {
+        const phpUnitXml = await this._files.findup(
+            ['phpunit.xml', 'phpunit.xml.dist'],
+            {
+                cwd: normalize(dirname(params.file))
+            }
+        );
+
+        let options = {
             cwd: this.fsPath(),
         };
+
+        if (phpUnitXml) {
+            this.testRunner = new PhpUnitTestRunner()
+            options.cwd = normalize(dirname(phpUnitXml));
+        } else {
+            this.testRunner = new CodeceptTestRunner();
+        }
+
+        this.testRunner
+            .setPhpBinary(this.config.php)
+            .setBinary(phpUnitXml ? this.config.codecept : this.config.phpunit)
+            .setBinary(this.config.codecept)
+            .setArgs(this.config.args);
 
         rerun === false
             ? await this.testRunner.run(params, options)
@@ -245,7 +267,7 @@ export class WorkspaceFolder {
 
     private async sendRunTestFinished(response: ITestResponse) {
         const params = {
-            command: this.testRunner.getCommand(),
+            command: this.testRunner!.getCommand(),
             events: await this.changeEventsState(response),
         };
 
