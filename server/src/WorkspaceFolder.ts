@@ -157,6 +157,7 @@ export class WorkspaceFolder {
 
         this.testRunner
             .setPhpBinary(this.config.php)
+            .setPhpArgs(this.config.phpArgs)
             .setBinary(phpUnitXml ? this.config.codecept : this.config.phpunit)
             .setBinary(this.config.codecept)
             .setArgs(this.config.args);

@@ -15,6 +15,7 @@ export class PhpUnitTestRunner {
     private phpBinary = '';
     private phpUnitBinary = '';
     private args: string[] = [];
+    private phpArgs: string[] = [];
     private lastArgs: string[] = [];
     private lastOutput: string = '';
     private lastCommand: Command = {
@@ -41,6 +42,12 @@ export class PhpUnitTestRunner {
 
     setArgs(args: string[] | undefined) {
         this.args = args || [];
+
+        return this;
+    }
+
+    setPhpArgs(args: string[] | undefined) {
+        this.phpArgs = args || [];
 
         return this;
     }
@@ -117,7 +124,7 @@ export class PhpUnitTestRunner {
         args: string[],
         spawnOptions?: SpawnOptions
     ): Promise<Command> {
-        let params = [];
+        let params : string[]= [];
 
         const [phpBinary, phpUnitBinary, phpUnitXml] = await Promise.all([
             this.getPhpBinary(),
@@ -127,6 +134,7 @@ export class PhpUnitTestRunner {
 
         if (phpBinary) {
             params.push(phpBinary);
+            params = params.concat(this.phpArgs);
         }
 
         if (phpUnitBinary) {

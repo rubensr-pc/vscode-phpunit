@@ -6,6 +6,7 @@ export interface TestRunner {
 	cancel() : boolean;
     setBinary(codecept: string | undefined) : TestRunner;
 	setPhpBinary(php: string | undefined) : TestRunner;
+    setPhpArgs(phpArgs: string[] | undefined) : TestRunner;
 	setArgs(args: string[] | undefined) : TestRunner;
     getOutput(): string;
     getCommand() : Command;

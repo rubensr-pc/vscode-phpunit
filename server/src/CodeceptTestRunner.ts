@@ -15,6 +15,7 @@ export class CodeceptTestRunner {
     private phpBinary = '';
     private phpUnitBinary = '';
     private args: string[] = [];
+    private phpArgs: string[] = [];
     private lastArgs: string[] = [];
     private lastOutput: string = '';
     private lastCommand: Command = {
@@ -41,6 +42,12 @@ export class CodeceptTestRunner {
 
     setArgs(args: string[] | undefined) {
         this.args = args || [];
+
+        return this;
+    }
+
+    setPhpArgs(args: string[] | undefined) {
+        this.phpArgs = args || [];
 
         return this;
     }
@@ -109,7 +116,7 @@ export class CodeceptTestRunner {
         args: string[],
         spawnOptions?: SpawnOptions
     ): Promise<Command> {
-        let params = [];
+        let params : string[] = [];
 
         const [phpBinary, phpUnitBinary, phpUnitXml,
             codeceptionConfig] = await Promise.all([
@@ -120,8 +127,8 @@ export class CodeceptTestRunner {
         ]);
 
         if (phpBinary) {
-            // params.push('phpBinary');
-            params.push('php');
+            params.push(phpBinary);
+            params = params.concat(this.phpArgs);
         }
 
         if (phpUnitBinary) {
@@ -137,8 +144,7 @@ export class CodeceptTestRunner {
             // params.push(phpUnitXml);
         }
 
-        params = [
-            '-dxdebug.remote_port=8000',
+        params = params.concat([
             //'-dauto_prepend_file=xdebug_filter.php',
             './vendor/bin/codecept',
             'run',
@@ -148,13 +154,13 @@ export class CodeceptTestRunner {
             '--no-colors',
             '--config=' + codeceptionConfig,
             '--ext=DotReporter'
-        ];
+        ]);
 
         params = params.concat(this.args, args).filter(arg => !!arg);
 
         return {
             title: 'PHPUnit LSP',
-            command: 'php', //params.shift() as string,
+            command: params.shift() as string,
             arguments: params,
         };
     }

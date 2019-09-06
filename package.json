@@ -116,6 +116,11 @@
                     "type": "string",
                     "description": "Absolute path to php. Fallback to global php if it exists on the command line."
                 },
+                "codecept.phpArgs": {
+                    "type": "array",
+                    "default": [],
+                    "description": "Any php arguments E.g. -d xdebug.remote_port=8000"
+                },
                 "codecept.codecept": {
                     "type": "string",
                     "description": "Path to codecept.\n\nAutomatically finds it in common places:\n  - Composer vendor directory\n  - codecept (or codecept.bat for windows) globally on the command line"

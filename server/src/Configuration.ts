@@ -7,6 +7,7 @@ interface IConfiguration {
     maxNumberOfProblems: number;
     files: string;
     php?: string;
+    phpArgs?: string[];
     codecept?: string;
     phpunit?: string;
     args?: string[];
@@ -33,6 +34,10 @@ export class Configuration implements IConfiguration {
 
     get php(): string | undefined {
         return this.defaults.php;
+    }
+
+    get phpArgs(): string[] | undefined {
+        return this.defaults.phpArgs;
     }
 
     get codecept(): string | undefined {
