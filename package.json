@@ -1,11 +1,11 @@
 {
     "name": "vscode-codecept",
-    "description": "Codeception Test Explorer",
-    "displayName": "Codeception Test Explorer",
+    "description": "Codeception/PHPUnit Test Explorer",
+    "displayName": "Codeception/PHPUnit Test Explorer",
     "icon": "img/icon.png",
-    "author": "recca0120",
+    "author": "rubensr-pc",
     "license": "MIT",
-    "version": "2.0.78",
+    "version": "2.0.79",
     "preview": true,
     "repository": {
         "type": "git",
@@ -24,6 +24,7 @@
         "codecept",
         "codeception",
         "codecept",
+        "phpunit",
         "language server protocol"
     ],
     "engines": {

@@ -13,7 +13,7 @@ export interface Params {
 
 export class CodeceptTestRunner {
     private phpBinary = '';
-    private phpUnitBinary = '';
+    private codeceptBinary = '';
     private args: string[] = [];
     private phpArgs: string[] = [];
     private lastArgs: string[] = [];
@@ -32,9 +32,9 @@ export class CodeceptTestRunner {
         return this;
     }
 
-    setBinary(phpUnitBinary: PathLike | URI | undefined) {
-        this.phpUnitBinary = phpUnitBinary
-            ? this._files.asUri(phpUnitBinary).fsPath
+    setBinary(codeceptBinary: PathLike | URI | undefined) {
+        this.codeceptBinary = codeceptBinary
+            ? this._files.asUri(codeceptBinary).fsPath
             : '';
 
         return this;
@@ -118,11 +118,10 @@ export class CodeceptTestRunner {
     ): Promise<Command> {
         let params : string[] = [];
 
-        const [phpBinary, phpUnitBinary, phpUnitXml,
+        const [phpBinary, codeceptBinary,
             codeceptionConfig] = await Promise.all([
             this.getPhpBinary(),
-            this.getPhpUnitBinary(spawnOptions),
-            this.getPhpUnitXml(spawnOptions),
+            this.getCodeceptBinary(spawnOptions),
             this.getCodeceptionConfig(args, spawnOptions)
         ]);
 
@@ -131,22 +130,15 @@ export class CodeceptTestRunner {
             params = params.concat(this.phpArgs);
         }
 
-        if (phpUnitBinary) {
-            // params.push(phpUnitBinary);
+        if (codeceptBinary) {
+            params.push(codeceptBinary);
         }
 
-        const hasConfiguration = this.args.some((arg: string) =>
-            ['-c', '--configuration'].some(key => arg.indexOf(key) !== -1)
-        );
-
-        if (!hasConfiguration && phpUnitXml) {
-            // params.push('-c');
-            // params.push(phpUnitXml);
-        }
+        // const hasConfiguration = this.args.some((arg: string) =>
+        //     ['-c', '--configuration'].some(key => arg.indexOf(key) !== -1)
+        // );
 
         params = params.concat([
-            //'-dauto_prepend_file=xdebug_filter.php',
-            './vendor/bin/codecept',
             'run',
             'unit',
             //'--coverage-xml',
@@ -159,7 +151,7 @@ export class CodeceptTestRunner {
         params = params.concat(this.args, args).filter(arg => !!arg);
 
         return {
-            title: 'PHPUnit LSP',
+            title: 'Codecept LSP',
             command: params.shift() as string,
             arguments: params,
         };
@@ -169,31 +161,24 @@ export class CodeceptTestRunner {
         return Promise.resolve(this.phpBinary);
     }
 
+    private async getCodeceptBinary(
+        spawnOptions?: SpawnOptions
+    ): Promise<string | void> {
+        if (this.codeceptBinary) {
+            return this.codeceptBinary;
+        }
+
+        return await this._files.findup(
+            ['vendor/bin/codecept', 'codecept'],
+            spawnOptions
+        );
+    }
+
     private async getCodeceptionConfig(args: string[], spawnOptions?: SpawnOptions) {
         // this is probably wrong
         if (args.length === 0) return '';
 
         return await this._files.finduptocwd('codeception.yml',
             args[0], spawnOptions);
-    }
-
-    private async getPhpUnitBinary(
-        spawnOptions?: SpawnOptions
-    ): Promise<string | void> {
-        if (this.phpUnitBinary) {
-            return this.phpUnitBinary;
-        }
-
-        return await this._files.findup(
-            ['vendor/bin/phpunit', 'phpunit'],
-            spawnOptions
-        );
-    }
-
-    private async getPhpUnitXml(spawnOptions?: SpawnOptions) {
-        return await this._files.findup(
-            ['phpunit.xml', 'phpunit.xml.dist'],
-            spawnOptions
-        );
     }
 }
