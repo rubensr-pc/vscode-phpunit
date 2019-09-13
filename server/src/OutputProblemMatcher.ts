@@ -82,6 +82,9 @@ export class OutputProblemMatcher extends ProblemMatcher {
                     file: m[1],
                     line: parseInt(m[2], 10) - 1,
                 });
+                Object.assign(problem, {
+                    file: m[1]
+                });
                 break;
             case 3:
                 Object.assign(problem, {
@@ -127,7 +130,7 @@ export class OutputProblemMatcher extends ProblemMatcher {
         const suite = suites[0];
 
         const test: TestNode = suite.children.find(
-            (test: TestNode) => test.id === `${suiteId}::${problem.method}`
+            (test: TestNode) => test.id === `file://${problem.file}::${suiteId}::${problem.method}`
         );
 
         if (!test) {

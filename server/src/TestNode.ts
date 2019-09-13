@@ -179,7 +179,7 @@ export class TestNode extends BaseTestNode implements TestInfo {
     }
 
     get id(): string {
-        return [this.qualifiedClassName, this.name].join('::');
+        return [this.file, this.qualifiedClassName, this.name].join('::');
     }
 
     get label(): string {

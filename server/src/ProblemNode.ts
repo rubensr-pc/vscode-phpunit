@@ -63,7 +63,7 @@ export class ProblemNode implements Problem {
             .filter(name => !!name)
             .join('\\');
 
-        this.id = `${qualifiedClassName}::${this.method}`;
+        this.id = `file://${this.file}::${qualifiedClassName}::${this.method}`;
 
         return this;
     }
