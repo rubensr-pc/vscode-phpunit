@@ -14,6 +14,7 @@ export interface Params {
 export class CodeceptTestRunner {
     private phpBinary = '';
     private codeceptBinary = '';
+    private enableCoverage = false;
     private args: string[] = [];
     private phpArgs: string[] = [];
     private lastArgs: string[] = [];
@@ -48,6 +49,12 @@ export class CodeceptTestRunner {
 
     setPhpArgs(args: string[] | undefined) {
         this.phpArgs = args || [];
+
+        return this;
+    }
+
+    setEnableCoverage(enable: boolean | undefined) {
+        this.enableCoverage = enable || false;
 
         return this;
     }
@@ -141,12 +148,15 @@ export class CodeceptTestRunner {
         params = params.concat([
             'run',
             'unit',
-            //'--coverage-xml',
             '--ansi',
             '--no-colors',
             '--config=' + codeceptionConfig,
             '--ext=DotReporter'
         ]);
+
+        if (this.enableCoverage) {
+            params = params.concat(["--coverage-xml"]);
+        }
 
         params = params.concat(this.args, args).filter(arg => !!arg);
 

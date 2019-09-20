@@ -14,6 +14,7 @@ export interface Params {
 export class PhpUnitTestRunner {
     private phpBinary = '';
     private phpUnitBinary = '';
+    private enableCoverage = false;
     private args: string[] = [];
     private phpArgs: string[] = [];
     private lastArgs: string[] = [];
@@ -48,6 +49,12 @@ export class PhpUnitTestRunner {
 
     setPhpArgs(args: string[] | undefined) {
         this.phpArgs = args || [];
+
+        return this;
+    }
+
+    setEnableCoverage(enable: boolean | undefined) {
+        this.enableCoverage = enable || false;
 
         return this;
     }
@@ -148,6 +155,12 @@ export class PhpUnitTestRunner {
         if (!hasConfiguration && phpUnitXml) {
             params.push('-c');
             params.push(phpUnitXml);
+        }
+
+        if (this.enableCoverage) {
+            params = params.concat(["--coverage-xml"]);
+        } else {
+            params = params.concat(["--no-coverage"]);
         }
 
         params = params.concat(this.args, args).filter(arg => !!arg);

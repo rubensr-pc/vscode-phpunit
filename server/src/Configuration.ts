@@ -11,12 +11,14 @@ interface IConfiguration {
     codecept?: string;
     phpunit?: string;
     args?: string[];
+    enableCoverage: boolean;
 }
 
 export class Configuration implements IConfiguration {
     defaults: IConfiguration = {
         maxNumberOfProblems: 10000,
         files: '**/*.php',
+        enableCoverage: false
     };
 
     constructor(
@@ -50,6 +52,10 @@ export class Configuration implements IConfiguration {
 
     get args(): string[] | undefined {
         return this.defaults.args;
+    }
+
+    get enableCoverage() : boolean {
+        return this.defaults.enableCoverage;
     }
 
     async update(configurationCapability = true) {
