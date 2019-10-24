@@ -15,7 +15,8 @@ Run your PHPUnit tests in Node using the
 * Forwards the console output from PHPUnit to a VS Code output channel
 
 ## Getting started
-* Install the extension
+* Build the extension - `vsce package`
+* Install the extension - From VSCode command prompt (ctrl+shift+p) choose "Exteions: Install from VSIX..."
 * Restart VS Code and open the Test view
 * Run your tests using the ![Run](img/run.png) icons in the Test Explorer or the CodeLenses in your test file
 
