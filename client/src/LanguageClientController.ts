@@ -97,7 +97,9 @@ export class LanguageClientController implements Disposable {
 
         let coverageToggle = window.createStatusBarItem(StatusBarAlignment.Left, 100);
         coverageToggle.command = cmdId;
-        coverageToggle.text = '$(thumbsup) Coverage';
+        coverageToggle.text = this.config.enableCoverage
+            ? '$(thumbsup) Coverage'
+            : '$(thumbsdown) Coverage';
         coverageToggle.show();
 
         this.disposables.push(
@@ -107,7 +109,9 @@ export class LanguageClientController implements Disposable {
                     ? '$(thumbsup) Coverage'
                     : '$(thumbsdown) Coverage'
 
-                window.showInformationMessage('Hi Mate');
+                window.showInformationMessage(this.config.enableCoverage
+                    ? 'Coverage enabled'
+                    : 'Coverage disabled');
             })
         );
 

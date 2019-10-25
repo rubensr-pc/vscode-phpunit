@@ -159,6 +159,7 @@ export class WorkspaceFolder {
             .setPhpBinary(this.config.php)
             .setPhpArgs(this.config.phpArgs)
             .setBinary(phpUnitXml ? this.config.codecept : this.config.phpunit)
+            .setEnableCoverage(this.config.enableCoverage)
             .setBinary(this.config.codecept)
             .setArgs(this.config.args);
 

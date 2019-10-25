@@ -7,7 +7,8 @@ export interface TestRunner {
     setBinary(codecept: string | undefined) : TestRunner;
 	setPhpBinary(php: string | undefined) : TestRunner;
     setPhpArgs(phpArgs: string[] | undefined) : TestRunner;
-	setArgs(args: string[] | undefined) : TestRunner;
+    setArgs(args: string[] | undefined) : TestRunner;
+    setEnableCoverage(enable: boolean | undefined) : TestRunner;
     getOutput(): string;
     getCommand() : Command;
 }
