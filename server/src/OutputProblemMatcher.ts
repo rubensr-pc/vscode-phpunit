@@ -19,16 +19,16 @@ const statusPattern = new RegExp(
     `There (was|were) \\d+ (${statusString})(s)?( test)?(:)?`,
     'i'
 );
-const startPattern = new RegExp('^\\d+\\)\\s(([^:]*): (.*))$');
-const messagePattern = new RegExp('^([^#].*)$');
+const classPattern = new RegExp('^\\d+\\)\\s(([^:]*): (.*))$');
+const methodPattern = new RegExp('^\\s+Test\\s+(([^:]*):(.*))$');
+const messagePattern = new RegExp('^(.*)$');
 const filesPattern = new RegExp('^#\\d+\\s+(.*):(\\d+)$');
-const classPattern = new RegExp('^#\\d+\\s+(.*)->(.*)$');
 
 export class OutputProblemMatcher extends ProblemMatcher {
     private currentStatus: Status = this.asStatus('failure');
 
     constructor(private suites?: TestSuiteCollection) {
-        super([startPattern, messagePattern, filesPattern, classPattern]);
+        super([classPattern, methodPattern, messagePattern, filesPattern]);
     }
 
     async parse(contents: string): Promise<ProblemNode[]> {
@@ -73,24 +73,26 @@ export class OutputProblemMatcher extends ProblemMatcher {
     ) {
         switch (index) {
             case 0:
+                Object.assign(problem, {
+                    class: m[2],
+                    status: this.currentStatus,
+                });
                 break;
             case 1:
-                    problem.message += `${m[1]}\n`;
-                    break;
+                Object.assign(problem, {
+                    method: m[3]
+                });
+                break;
             case 2:
+                problem.message += `${m[1]}\n`;
+                break;
+            case 3:
                 problem.files.push({
                     file: m[1],
                     line: parseInt(m[2], 10) - 1,
                 });
                 Object.assign(problem, {
                     file: m[1]
-                });
-                break;
-            case 3:
-                Object.assign(problem, {
-                    class: m[1],
-                    method: m[2],
-                    status: this.currentStatus,
                 });
                 problem.updateId();
                 break;

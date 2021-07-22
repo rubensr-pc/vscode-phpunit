@@ -5,7 +5,7 @@
     "icon": "img/icon.png",
     "author": "rubensr-pc",
     "license": "MIT",
-    "version": "2.0.82",
+    "version": "2.0.83",
     "preview": true,
     "repository": {
         "type": "git",
@@ -172,7 +172,7 @@
         ]
     },
     "scripts": {
-        "vscode:prepublish": "cd client && npm run update-vscode && cd .. && npm run clean && npm run compile",
+        "vscode:prepublish": "npm run compile",
         "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
         "compile": "npm run compile:client && npm run compile:server",
         "compile:client": "webpack --mode production --config ./client/webpack.config.js",

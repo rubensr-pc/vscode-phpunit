@@ -151,7 +151,7 @@ export class LanguageClientAdapter implements TestAdapter {
         await this.client.onReady();
 
         this.client.onRequest(this.requestName('TestRetryEvent'), () => {
-            this.retireEmitter.fire();
+            this.retireEmitter.fire({});
         });
     }
 
