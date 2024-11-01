@@ -136,7 +136,7 @@ export abstract class Command {
     }
 
     protected getCommand() {
-        return [...this.getCommendPrefix(), ...this.getPHPUnitWithArgs()];
+        return [...this.getCommandPrefix(), ...this.getPHPUnitWithArgs()];
     }
 
     protected getPHPUnitWithArgs() {
@@ -156,7 +156,7 @@ export abstract class Command {
         return (this.configuration.get('phpunit') as string) ?? '';
     }
 
-    private getCommendPrefix() {
+    private getCommandPrefix() {
         return ((this.configuration.get('command') as string) ?? '').split(' ');
     }
 
@@ -184,7 +184,7 @@ export abstract class Command {
                 _.map((v) => typeof v === 'number' ? v : decodeURIComponent(v)),
             )
             .map((input: string) => this.getPathReplacer().localToRemote(input))
-            .concat('--colors=never', '--teamcity');
+            .concat('--colors=never', '--teamcity', '--configuration=tests/unit/phpunit.xml');
     }
 
     private getPathReplacer() {

@@ -17,7 +17,7 @@ export class PropertyParser {
 
         let uniqueId = type + '.' + this.qualifiedClass(namespace, _class);
         if (method) {
-            uniqueId = `${type}.${uniqueId}::${method}`;
+            uniqueId = `${uniqueId}::${method}`;
         }
 
         return uniqueId;

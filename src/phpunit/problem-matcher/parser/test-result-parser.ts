@@ -94,8 +94,12 @@ export class TestResultParser implements IParser<Result | undefined> {
             .split('::');
 
         const file = split.shift();
+
+        let type = file.substring(file.indexOf('/tests/') + 7);
+        type = type.substring(0, type.indexOf('/'));
+
         const id = split.join('::');
-        const testId = id.replace(/\swith\sdata\sset\s[#"].+$/, '');
+        const testId = type + '.' + id.replace(/\swith\sdata\sset\s[#"].+$/, '');
 
         return { id, file, testId };
     }
