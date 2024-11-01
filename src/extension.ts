@@ -120,7 +120,7 @@ function getWorkspaceTestPatterns() {
 
     return vscode.workspace.workspaceFolders.map((workspaceFolder) => ({
         workspaceFolder,
-        pattern: new vscode.RelativePattern(workspaceFolder, '**/*.php'),
+        pattern: new vscode.RelativePattern(workspaceFolder, '**/*Test.php'),
         exclude: new vscode.RelativePattern(workspaceFolder, '**/{.git,node_modules,vendor}/**'),
     }));
 }

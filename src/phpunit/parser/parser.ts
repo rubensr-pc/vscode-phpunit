@@ -22,6 +22,7 @@ export type Attribute = {
 
 export class Test implements Attribute {
     public readonly id!: string;
+    public readonly type!: string;
     public readonly qualifiedClass!: string;
     public readonly namespace!: string;
     public readonly class?: string;
@@ -97,13 +98,13 @@ export class Parser {
             return [];
         }
 
-        const attributes = parseProperty(ast as Declaration, this.namespace);
+        const attributes = parseProperty(ast as Declaration, file, this.namespace);
         const suite = new Test(file, attributes);
 
         suite.children = _class.body
             .filter((method) => validator.isTest(method as Method))
             .map((method) => {
-                const attributes = parseProperty(method, this.namespace, _class);
+                const attributes = parseProperty(method, file, this.namespace, _class);
                 const test = new Test(file, attributes);
                 test.parent = suite;
 

@@ -10,14 +10,14 @@ export class PropertyParser {
         method: this.parseMethod,
     };
 
-    public uniqueId(namespace?: string, _class?: string, method?: string) {
+    public uniqueId(type: string, namespace?: string, _class?: string, method?: string) {
         if (!_class) {
             return namespace;
         }
 
-        let uniqueId = this.qualifiedClass(namespace, _class);
+        let uniqueId = type + '.' + this.qualifiedClass(namespace, _class);
         if (method) {
-            uniqueId = `${uniqueId}::${method}`;
+            uniqueId = `${type}.${uniqueId}::${method}`;
         }
 
         return uniqueId;
@@ -27,16 +27,20 @@ export class PropertyParser {
         return [namespace, _class].filter((name) => !!name).join('\\');
     }
 
-    public parse(declaration: Declaration, namespace?: Namespace, _class?: Class): Attribute {
+    public parse(declaration: Declaration, file: string, namespace?: Namespace, _class?: Class): Attribute {
+        let type = file.substring(file.indexOf('/tests/') + 7);
+        type = type.substring(0, type.indexOf('/'));
+
         const fn = this.lookup[declaration.kind];
         const parsed = fn.apply(this, [declaration, namespace, _class]);
         const annotations = parseAnnotation(declaration);
         const { start, end } = this.parsePosition(declaration);
-        const id = this.uniqueId(parsed.namespace, parsed.class, parsed.method);
+        const id = this.uniqueId(type, parsed.namespace, parsed.class, parsed.method);
         const qualifiedClass = this.qualifiedClass(parsed.namespace, parsed.class);
 
         return {
             id,
+            type,
             qualifiedClass,
             ...parsed,
             start,
@@ -76,6 +80,6 @@ export class PropertyParser {
 
 export const propertyParser = new PropertyParser();
 
-export function parse(declaration: Declaration, namespace?: Namespace, _class?: Class) {
-    return propertyParser.parse(declaration, namespace, _class);
+export function parse(declaration: Declaration, file: string, namespace?: Namespace, _class?: Class) {
+    return propertyParser.parse(declaration, file, namespace, _class);
 }

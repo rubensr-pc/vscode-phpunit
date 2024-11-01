@@ -1,15 +1,15 @@
 {
   "name": "vscode-phpunit",
-  "description": "PHPUnit Test Explorer for VSCode",
-  "displayName": "PHPUnit Test Explorer",
+  "description": "PHPUnit Test Explorer for PC",
+  "displayName": "PC Test Explorer",
   "icon": "img/icon.png",
-  "publisher": "recca0120",
+  "publisher": "rubensr-pc",
   "version": "3.2.1",
   "private": true,
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/recca0120/vscode-phpunit"
+    "url": "https://github.com/rubensr-pc/vscode-phpunit"
   },
   "engines": {
     "vscode": "^1.71.0"
