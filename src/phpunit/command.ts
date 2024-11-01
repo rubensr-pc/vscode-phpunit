@@ -177,6 +177,8 @@ export abstract class Command {
             },
         });
 
+        const config = '--configuration=tests/unit/phpunit.xml';
+
         return Object.entries(argv)
             .filter(([key]) => !['teamcity', 'colors', 'testdox', 'c'].includes(key))
             .reduce(
@@ -184,7 +186,7 @@ export abstract class Command {
                 _.map((v) => typeof v === 'number' ? v : decodeURIComponent(v)),
             )
             .map((input: string) => this.getPathReplacer().localToRemote(input))
-            .concat('--colors=never', '--teamcity', '--configuration=tests/unit/phpunit.xml');
+            .concat('--colors=never', '--teamcity', config);
     }
 
     private getPathReplacer() {
