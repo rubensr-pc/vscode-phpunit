@@ -152,7 +152,7 @@ export abstract class Command {
         if (this.type == 'codecept') {
             return this.setParaTestFunctional([
                 this.phpPath(),
-                this.phpOptions(),
+                ...this.phpOptions(),
                 this.phpCodeceptPath(),
                 'run',
                 'unit',
@@ -162,7 +162,7 @@ export abstract class Command {
 
         return this.setParaTestFunctional([
             this.phpPath(),
-            this.phpOptions(),
+            ...this.phpOptions(),
             this.phpUnitPath(),
             ...this.getArguments(),
         ]);
@@ -190,7 +190,7 @@ export abstract class Command {
     }
 
     private phpOptions() {
-        return (this.configuration.get('phpoptions') as string) ?? '';
+        return ((this.configuration.get('phpoptions') as string) ?? '').split(' ');
     }
 
     private getArguments(): string[] {
