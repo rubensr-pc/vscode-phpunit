@@ -34,6 +34,10 @@ export class TestFile {
     getArguments(testId: string): string {
         const test = this.findTest(testId);
 
+        if (testId.startsWith('functional-unit')) {
+            return test ? `${(this.asFilter(test) ?? '')}` : '';
+        }
+
         return test ? `${(this.asFilter(test) ?? '')} ${encodeURIComponent(test.file)}` : '';
     }
 
@@ -90,6 +94,10 @@ export class TestFile {
     }
 
     private asFilter(test: Test) {
+        if (test.id.startsWith('functional-unit')) {
+            return `${test.file}:^${this.asDeps(test).join('|')}$`;
+        }
+
         return test.children.length > 0
             ? ''
             : `--filter '^.*::(${this.asDeps(test).join('|')})( with data set .*)?$'`;

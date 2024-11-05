@@ -124,7 +124,7 @@ class TestQueueHandler {
 
         return await Promise.all(
             this.request.include.map((test) =>
-                runner.run(command.setArguments(this.getTestArguments(test))),
+                runner.run(command.setArguments(this.getTestArguments(test), test.id)),
             ),
         );
     }

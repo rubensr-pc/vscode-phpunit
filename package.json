@@ -82,10 +82,20 @@
           "description": "Absolute path to php. Fallback to global php if it exists on the command line.",
           "default": "php"
         },
+        "phpunit.phpoptions": {
+          "type": "string",
+          "description": "Options for PHP. Example -d xdebug.mode=debug -d xdebug.start_with_request=yes -d xdebug.client_port=8000 -d xdebug.discover_client_host=true",
+          "default": ""
+        },
         "phpunit.phpunit": {
           "type": "string",
           "description": "Path to phpunit. Can be the phpunit file or phpunit.phar.\n\nAutomatically finds it in common places:\n  - Composer vendor directory\n  - phpunit.phar in your project\n  - phpunit (or phpunit.bat for windows) globally on the command line",
           "default": "vendor/bin/phpunit"
+        },
+        "phpunit.codecept": {
+          "type": "string",
+          "description": "Path to codecept.",
+          "default": "vendor/bin/codecept"
         },
         "phpunit.command": {
           "type": "string",

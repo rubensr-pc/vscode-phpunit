@@ -48,6 +48,10 @@ class PathReplacer {
         );
     }
 
+    public absoluteToRelative(path: string) {
+        return path.replace(this.options.cwd + '/', '');
+    }
+
     private doRemoteToLocal(path: string) {
         return this.replaceMapping(path, (localPath, remotePath) => {
             return path.replace(
@@ -93,6 +97,7 @@ class PathReplacer {
 
 export abstract class Command {
     private arguments = '';
+    private type = 'phpunit';
     private readonly pathReplacer: PathReplacer;
 
     constructor(
@@ -102,8 +107,12 @@ export abstract class Command {
         this.pathReplacer = this.resolvePathReplacer(options, configuration);
     }
 
-    setArguments(args: string) {
+    setArguments(args: string, testId: string) {
         this.arguments = args.trim();
+
+        if (testId.startsWith('functional-unit')) {
+            this.type = 'codecept';
+        }
 
         return this;
     }
@@ -140,8 +149,20 @@ export abstract class Command {
     }
 
     protected getPHPUnitWithArgs() {
+        if (this.type == 'codecept') {
+            return this.setParaTestFunctional([
+                this.phpPath(),
+                this.phpOptions(),
+                this.phpCodeceptPath(),
+                'run',
+                'unit',
+                ...this.getArguments(),
+            ]);
+        }
+
         return this.setParaTestFunctional([
             this.phpPath(),
+            this.phpOptions(),
             this.phpUnitPath(),
             ...this.getArguments(),
         ]);
@@ -156,12 +177,20 @@ export abstract class Command {
         return (this.configuration.get('phpunit') as string) ?? '';
     }
 
+    private phpCodeceptPath() {
+        return (this.configuration.get('codecept') as string) ?? '';
+    }
+
     private getCommandPrefix() {
         return ((this.configuration.get('command') as string) ?? '').split(' ');
     }
 
     private phpPath() {
         return (this.configuration.get('php') as string) ?? '';
+    }
+
+    private phpOptions() {
+        return (this.configuration.get('phpoptions') as string) ?? '';
     }
 
     private getArguments(): string[] {
@@ -177,7 +206,7 @@ export abstract class Command {
             },
         });
 
-        const config = '--configuration=tests/unit/phpunit.xml';
+        const config = (this.type == 'phpunit' ? '--configuration=tests/unit/phpunit.xml' : '--config=tests/functional-unit/codeception.yml');
 
         return Object.entries(argv)
             .filter(([key]) => !['teamcity', 'colors', 'testdox', 'c'].includes(key))
@@ -185,8 +214,14 @@ export abstract class Command {
                 (args: any, [key, value]) => [...parseValue(key, value), ...args],
                 _.map((v) => typeof v === 'number' ? v : decodeURIComponent(v)),
             )
-            .map((input: string) => this.getPathReplacer().localToRemote(input))
-            .concat('--colors=never', '--teamcity', config);
+            .map((input: string) => 
+                (this.type == 'phpunit'
+                    ? this.getPathReplacer().localToRemote(input)
+                    : this.getPathReplacer().absoluteToRelative(input))
+            )
+            .concat((this.type == 'phpunit' ? '--colors=never' : '--no-colors'), 
+                (this.type == 'phpunit' ? '--teamcity' : '--no-artifacts'), 
+                config);
     }
 
     private getPathReplacer() {
