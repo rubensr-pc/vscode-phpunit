@@ -271,7 +271,7 @@ describe('TestRunner Test', () => {
 
         await expectedRun({
             ...data,
-            command: command.setArguments(args),
+            command: command.setArguments(args, 'todo'),
             expected: generateExceptedByCommand(command, expected, inputs),
         });
 
@@ -307,7 +307,7 @@ describe('TestRunner Test', () => {
 
         await expectedRun({
             ...data,
-            command: command.setArguments(args),
+            command: command.setArguments(args, 'todo'),
             expected: generateExceptedByCommand(command, expected, inputs),
         });
 
@@ -343,7 +343,7 @@ describe('TestRunner Test', () => {
 
         await expectedRun({
             ...data,
-            command: command.setArguments(args),
+            command: command.setArguments(args, 'todo'),
             expected: generateExceptedByCommand(command, expected, inputs),
         });
 

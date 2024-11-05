@@ -17,7 +17,7 @@ describe('Command Test', () => {
         it('should add -f when phpunit binary is paratest and has --filter', () => {
             const command = givenCommand({
                 phpunit: 'vendor/bin/paratest',
-            }).setArguments('--filter=\'^.*::(test_passed)( with data set .*)?$\'');
+            }).setArguments('--filter=\'^.*::(test_passed)( with data set .*)?$\'', 'todo');
 
             const { cmd, args } = command.apply();
 
@@ -36,7 +36,7 @@ describe('Command Test', () => {
             const testFile = phpUnitProjectForWindows('tests/AssertionsTest.php');
             const command = givenCommand({
                 phpunit: `${phpUnitProjectForWindows('vendor/bin/phpunit')}`,
-            }, cwd).setArguments(`${testFile} --filter='^.*::(test_passed)( with data set .*)?$'`);
+            }, cwd).setArguments(`${testFile} --filter='^.*::(test_passed)( with data set .*)?$'`, 'todo');
 
             const { cmd, args } = command.apply();
             expect(cmd).toEqual('php');
@@ -96,7 +96,7 @@ describe('Command Test', () => {
             const command = givenCommand({
                 command: 'docker run -i --rm -v ${PWD}:/app -w /app phpunit-stub',
                 phpunit: 'vendor/bin/paratest',
-            }).setArguments('--filter=\'^.*::(test_passed)( with data set .*)?$\'');
+            }).setArguments('--filter=\'^.*::(test_passed)( with data set .*)?$\'', 'todo');
 
             const { cmd, args } = command.apply();
             expect(cmd).toEqual('docker');
@@ -122,7 +122,7 @@ describe('Command Test', () => {
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     '${workspaceFolder}': '/var/www',
                 },
-            }).setArguments(`${testFile} --filter='^.*::(test_passed)( with data set .*)?$'`);
+            }).setArguments(`${testFile} --filter='^.*::(test_passed)( with data set .*)?$'`, 'todo');
 
             const { cmd, args } = command.apply();
             expect(cmd).toEqual('docker');
@@ -146,7 +146,7 @@ describe('Command Test', () => {
                     // eslint-disable-next-line @typescript-eslint/naming-convention
                     '${workspaceFolder}': '/var/www',
                 },
-            }, cwd).setArguments(`${testFile} --filter='^.*::(test_passed)( with data set .*)?$'`);
+            }, cwd).setArguments(`${testFile} --filter='^.*::(test_passed)( with data set .*)?$'`, 'todo');
 
             const { cmd, args } = command.apply();
             expect(cmd).toEqual('docker');
