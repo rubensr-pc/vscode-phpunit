@@ -50,6 +50,22 @@
       {
         "command": "phpunit.rerun",
         "title": "PHPUnit: Repeat the last test run"
+      },
+      {
+        "command": "phpunit.debug-all",
+        "title": "PHPUnit: debug all tests"
+      },
+      {
+        "command": "phpunit.debug-file",
+        "title": "PHPUnit: debug tests in current file"
+      },
+      {
+        "command": "phpunit.debug-test-at-cursor",
+        "title": "PHPUnit: debug the test at the current cursor position"
+      },
+      {
+        "command": "phpunit.redebug",
+        "title": "PHPUnit: Repeat the last test debug"
       }
     ],
     "keybindings": [
@@ -84,7 +100,12 @@
         },
         "phpunit.phpoptions": {
           "type": "string",
-          "description": "Options for PHP. Example -d xdebug.mode=debug -d xdebug.start_with_request=yes -d xdebug.client_port=8000 -d xdebug.discover_client_host=true",
+          "description": "Options for PHP.",
+          "default": ""
+        },
+        "phpunit.phpdebugoptions": {
+          "type": "string",
+          "description": "Options for PHP when debugging. Example -d xdebug.mode=debug -d xdebug.start_with_request=yes -d xdebug.client_port=8000 -d xdebug.discover_client_host=true",
           "default": "-d xdebug.mode=debug -d xdebug.start_with_request=yes -d xdebug.client_port=8000 -d xdebug.discover_client_host=true"
         },
         "phpunit.phpunit": {

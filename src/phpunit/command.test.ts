@@ -9,7 +9,7 @@ describe('Command Test', () => {
 
     describe('LocalCommand', () => {
         const givenCommand = (configuration: any, cwd?: string) => {
-            return new LocalCommand(new Configuration({ php: 'php', ...configuration }), {
+            return new LocalCommand(false, new Configuration({ php: 'php', ...configuration }), {
                 cwd: cwd ?? phpUnitProject(''),
             });
         };
@@ -86,7 +86,7 @@ describe('Command Test', () => {
 
     describe('RemoteCommand', () => {
         const givenCommand = (configuration: any, cwd?: string) => {
-            return new RemoteCommand(new Configuration({ php: 'php', ...configuration }), {
+            return new RemoteCommand(false, new Configuration({ php: 'php', ...configuration }), {
                 cwd: cwd ?? phpUnitProject(''),
             });
         };

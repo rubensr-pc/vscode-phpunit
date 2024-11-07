@@ -41,7 +41,16 @@ export async function activate(context: vscode.ExtensionContext) {
     const testRunProfile = ctrl.createRunProfile(
         'Run Tests',
         vscode.TestRunProfileKind.Run,
-        (request, cancellation) => handler.run(request, cancellation),
+        (request, cancellation) => handler.run(false, request, cancellation),
+        true,
+        undefined,
+        true,
+    );
+
+    const testDebugProfile = ctrl.createRunProfile(
+        'Debug Tests',
+        vscode.TestRunProfileKind.Debug,
+        (request, cancellation) => handler.run(true, request, cancellation),
         true,
         undefined,
         true,
@@ -94,11 +103,17 @@ export async function activate(context: vscode.ExtensionContext) {
         }),
     );
 
-    const commandHandler = new CommandHandler(testRunProfile, testData);
+    const commandHandler = new CommandHandler('run', testRunProfile, testData);
     context.subscriptions.push(commandHandler.runAll());
     context.subscriptions.push(commandHandler.runFile());
     context.subscriptions.push(commandHandler.runTestAtCursor());
     context.subscriptions.push(commandHandler.rerun(handler));
+
+    const debugCommandHandler = new CommandHandler('debug', testDebugProfile, testData);
+    context.subscriptions.push(debugCommandHandler.runAll());
+    context.subscriptions.push(debugCommandHandler.runFile());
+    context.subscriptions.push(debugCommandHandler.runTestAtCursor());
+    context.subscriptions.push(debugCommandHandler.rerun(handler));
 }
 
 export async function getOrCreateFile(controller: vscode.TestController, uri: vscode.Uri) {

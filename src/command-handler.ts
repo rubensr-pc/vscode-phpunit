@@ -3,17 +3,17 @@ import { TestFile } from './test-file';
 import { Handler } from './handler';
 
 export class CommandHandler {
-    constructor(private testRunProfile: TestRunProfile, private testData: Map<string, TestFile>) {
+    constructor(private verb: string, private testRunProfile: TestRunProfile, private testData: Map<string, TestFile>) {
     }
 
     runAll() {
-        return commands.registerCommand('phpunit.run-all', () => {
+        return commands.registerCommand(`phpunit.${this.verb}-all`, () => {
             this.run(undefined);
         });
     }
 
     runFile() {
-        return commands.registerCommand('phpunit.run-file', () => {
+        return commands.registerCommand(`phpunit.${this.verb}-file`, () => {
             const testFile = this.findTestFile();
 
             if (testFile) {
@@ -23,7 +23,7 @@ export class CommandHandler {
     }
 
     runTestAtCursor() {
-        return commands.registerCommand('phpunit.run-test-at-cursor', () => {
+        return commands.registerCommand(`phpunit.${this.verb}-test-at-cursor`, () => {
             const testFile = this.findTestFile();
 
             if (testFile) {
@@ -35,7 +35,7 @@ export class CommandHandler {
     }
 
     rerun(handler: Handler) {
-        return commands.registerCommand('phpunit.rerun', () => {
+        return commands.registerCommand(`phpunit.re${this.verb}`, () => {
             const latestTestRunRequest = handler.getLatestTestRunRequest();
 
             return latestTestRunRequest

@@ -369,7 +369,7 @@ describe('TestRunner Test', () => {
             phpunit: 'vendor/bin/phpunit',
             args: ['-c', '${PWD}/phpunit.xml'],
         });
-        const command = new LocalCommand(configuration, { cwd: phpUnitProject('') });
+        const command = new LocalCommand(false, configuration, { cwd: phpUnitProject('') });
         const expected = [
             'foo',
             'vendor/bin/phpunit',
@@ -399,7 +399,7 @@ describe('TestRunner Test', () => {
                 {
                     mock: false,
                     configuration,
-                    command: new LocalCommand(configuration, { cwd: phpUnitProject('') }),
+                    command: new LocalCommand(false, configuration, { cwd: phpUnitProject('') }),
                     appPath,
                     phpUnitProject,
                     expected: [],
@@ -423,7 +423,7 @@ describe('TestRunner Test', () => {
                 {
                     mock: true,
                     configuration,
-                    command: new RemoteCommand(configuration, { cwd: phpUnitProject('') }),
+                    command: new RemoteCommand(false, configuration, { cwd: phpUnitProject('') }),
                     appPath,
                     phpUnitProject,
                     expected: [
@@ -455,7 +455,7 @@ describe('TestRunner Test', () => {
                 {
                     mock: true,
                     configuration,
-                    command: new RemoteCommand(configuration, { cwd: phpUnitProject('') }),
+                    command: new RemoteCommand(false, configuration, { cwd: phpUnitProject('') }),
                     appPath,
                     phpUnitProject,
                     expected: [
@@ -490,7 +490,7 @@ describe('TestRunner Test', () => {
                 {
                     mock: true,
                     configuration,
-                    command: new RemoteCommand(configuration, { cwd: phpUnitProject('') }),
+                    command: new RemoteCommand(false, configuration, { cwd: phpUnitProject('') }),
                     appPath,
                     phpUnitProject,
                     expected: [

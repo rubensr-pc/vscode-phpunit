@@ -101,6 +101,7 @@ export abstract class Command {
     private readonly pathReplacer: PathReplacer;
 
     constructor(
+        private shouldDebug: boolean,
         protected configuration: IConfiguration = new Configuration(),
         private options: SpawnOptions = {},
     ) {
@@ -190,6 +191,9 @@ export abstract class Command {
     }
 
     private phpOptions() {
+        if (this.shouldDebug) {
+            return ((this.configuration.get('phpdebugoptions') as string) ?? '').split(' ');
+        }
         return ((this.configuration.get('phpoptions') as string) ?? '').split(' ');
     }
 

@@ -21,15 +21,16 @@ export class Handler {
         return this.latestTestRunRequest;
     }
 
-    async run(request: TestRunRequest, cancellation: CancellationToken) {
+    async run(shouldDebug: boolean, request: TestRunRequest, cancellation: CancellationToken) {
         if (!request.continuous) {
-            return this.startTestRun(request, cancellation);
+            return this.startTestRun(shouldDebug, request, cancellation);
         }
 
         const l = this.fileChangedEmitter.event(async (uri) => {
             await this.getOrCreateFile(this.ctrl, uri);
 
             await this.startTestRun(
+                shouldDebug,
                 new TestRunRequest(
                     request.include ?? [],
                     undefined,
@@ -42,8 +43,8 @@ export class Handler {
         cancellation.onCancellationRequested(() => l.dispose());
     }
 
-    private async startTestRun(request: TestRunRequest, cancellation: CancellationToken) {
-        const command = await this.createCommand();
+    private async startTestRun(shouldDebug: boolean, request: TestRunRequest, cancellation: CancellationToken) {
+        const command = await this.createCommand(shouldDebug);
 
         if (!command) {
             return;
@@ -59,7 +60,7 @@ export class Handler {
         await queueHandler.runQueue(runner, command);
     }
 
-    private async createCommand() {
+    private async createCommand(shouldDebug: boolean) {
         const workspaceFolder = await getCurrentWorkspaceFolder();
         if (!workspaceFolder) {
             return;
@@ -68,8 +69,8 @@ export class Handler {
         const options = { cwd: workspaceFolder!.uri.fsPath };
 
         return this.isRemote()
-            ? new RemoteCommand(this.configuration, options)
-            : new LocalCommand(this.configuration, options);
+            ? new RemoteCommand(shouldDebug, this.configuration, options)
+            : new LocalCommand(shouldDebug, this.configuration, options);
     }
 
     private isRemote() {

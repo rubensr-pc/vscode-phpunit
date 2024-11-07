@@ -44,7 +44,7 @@ describe('OutputChannelObserver', () => {
         );
 
         const cwd = phpUnitProject('');
-        const command = new LocalCommand(configuration, { cwd });
+        const command = new LocalCommand(false, configuration, { cwd });
         command.setArguments([file, filter].join(' '), 'todo');
 
         const testRunner = new TestRunner();
