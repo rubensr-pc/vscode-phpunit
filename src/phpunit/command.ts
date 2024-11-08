@@ -115,6 +115,10 @@ export abstract class Command {
             this.type = 'codecept';
         }
 
+        if (testId.startsWith('functional.')) {
+            this.type = 'functional';
+        }
+
         return this;
     }
 
@@ -210,7 +214,11 @@ export abstract class Command {
             },
         });
 
-        const config = (this.type == 'phpunit' ? '--configuration=tests/unit/phpunit.xml' : '--config=tests/functional-unit/codeception.yml');
+        let config = (this.type == 'phpunit' ? '--configuration=tests/unit/phpunit.xml' : '--config=tests/functional-unit/codeception.yml');
+
+        if (this.type === 'functional') {
+            config = '--configuration=tests/functional/phpunit.xml';
+        }
 
         return Object.entries(argv)
             .filter(([key]) => !['teamcity', 'colors', 'testdox', 'c'].includes(key))
@@ -218,13 +226,13 @@ export abstract class Command {
                 (args: any, [key, value]) => [...parseValue(key, value), ...args],
                 _.map((v) => typeof v === 'number' ? v : decodeURIComponent(v)),
             )
-            .map((input: string) => 
-                (this.type == 'phpunit'
+            .map((input: string) =>
+                ((this.type == 'phpunit' || this.type == 'functional')
                     ? this.getPathReplacer().localToRemote(input)
                     : this.getPathReplacer().absoluteToRelative(input))
             )
-            .concat((this.type == 'phpunit' ? '--colors=never' : '--no-colors'), 
-                (this.type == 'phpunit' ? '--teamcity' : '--no-artifacts'), 
+            .concat(((this.type == 'phpunit' || this.type == 'functional') ? '--colors=never' : '--no-colors'),
+                ((this.type == 'phpunit' || this.type == 'functional') ? '--teamcity' : '--no-artifacts'),
                 config);
     }
 
